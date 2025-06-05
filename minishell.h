@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jgamarra <jgamarra@student.42madrid.com>   +#+  +:+       +#+        */
+/*   By: natferna <natferna@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/08 18:21:09 by jgamarra          #+#    #+#             */
-/*   Updated: 2025/05/25 20:57:37 by jgamarra         ###   ########.fr       */
+/*   Updated: 2025/06/05 01:06:42 by natferna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -176,6 +176,7 @@ int		ft_strcountchr(char *str, char chr);
 char	*trim_space_char(char *input);
 char	*ft_strreplace(char *str, char *old, char *new);
 bool	valid_quotes(char *input, char quote);
+char	*remove_quotes_str(char *str);
 
 /* token.c */
 int		gettoken(char **ps, char *es, char **q, char **eq);
@@ -190,7 +191,7 @@ void	valid_command(t_execcmd *ecmd, t_minishell *minishell);
 t_cmd	*parseredirs(struct cmd *cmd, char **ps, char *es, t_minishell *mshell);
 
 /* heredoc.c */
-char	*process_heredoc(char *q, char *eq);
+char	*process_heredoc(char *q, char *eq, t_minishell *minishell);
 
 /* nulterminate.c */
 t_cmd	*nulterminate(t_cmd *cmd);
@@ -238,6 +239,7 @@ void	run_internal(t_cmd *cmd, t_minishell *minishell);
 
 /* exit.c */
 void	exit_impl(t_cmd *cmd, t_minishell *minishell);
+int is_valid_numeric_arg_strtol(const char *arg, int *out_value);
 
 /* cd.c */
 void	cd_impl(t_cmd *cmd, t_minishell *minishell);
@@ -279,5 +281,27 @@ void	handle_cmd_pipe(t_pipecmd *pcmd, t_minishell *minishell);
 
 /* leaks.c */
 void	check_leaks(void);
+
+/* history */
+void				history_clear(t_history *hist);
+int					get_print_start(t_history *hist, const char *option);
+void				history_print(t_history *hist, const char *option);
+void				history_free(t_history *hist);
+t_history			*history_create(void);
+void				write_history_lines(int fd, t_history *hist, int start);
+char				*read_file_content(const char *path);
+void				parse_history_content(char *content, t_history *hist);
+char				*construct_history_path(const char *histfile_name);
+void				load_history_file(t_history *hist,
+						const char *histfile_name);
+void				save_history_file(t_minishell *minishell, char *input);
+void				update_history_capacity(t_history *hist);
+void				history_add(t_history *hist, const char *entry);
+void				handle_history(t_execcmd *ecmd, t_minishell *minishell);
+
+/* input */
+void				init_history(t_minishell *ms);
+char				*get_input(t_minishell *ms);
+
 
 #endif

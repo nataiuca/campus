@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jgamarra <jgamarra@student.42madrid.com>   +#+  +:+       +#+        */
+/*   By: natferna <natferna@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/23 19:36:23 by jgamarra          #+#    #+#             */
-/*   Updated: 2025/05/23 19:38:05 by jgamarra         ###   ########.fr       */
+/*   Updated: 2025/06/05 01:15:39 by natferna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ static char	*append_line(char *heredoc, char *line)
 	return (new);
 }
 
-char	*process_heredoc(char *q, char *eq)
+char	*process_heredoc(char *q, char *eq, t_minishell *minishell)
 {
 	char	*heredoc;
 	char	*line;
@@ -55,13 +55,18 @@ char	*process_heredoc(char *q, char *eq)
 		line = readline("> ");
 		if (!line)
 			break ;
+		{
+			char *temp = expand_variables(line, minishell);
+			free(line);
+			if (!temp)
+				panic("Error during heredoc expansion");
+			line = temp;
+		}
 		line = ft_strjoin_free(line, "\n");
 		if (is_delimiter(line, delimiter))
 			break ;
 		heredoc = append_line(heredoc, line);
 		free(line);
 	}
-	free(delimiter);
-	free(line);
-	return (heredoc);
+	return (free(delimiter), free(line), (heredoc));
 }

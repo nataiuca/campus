@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cmd_handle.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jgamarra <jgamarra@student.42madrid.com>   +#+  +:+       +#+        */
+/*   By: natferna <natferna@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/24 21:40:49 by jgamarra          #+#    #+#             */
-/*   Updated: 2025/05/28 22:17:25 by jgamarra         ###   ########.fr       */
+/*   Updated: 2025/06/05 01:11:11 by natferna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,9 @@ void	handle_cmd_exec(t_execcmd *ecmd, t_minishell *minishell)
 			remove_quotes(ecmd, i);
 			i++;
 		}
+		// printf("exec_command: %s\n", ecmd->argv[0]);
+		// print_vector(ecmd->argv);
+		// exit(0);
 		exec_command(ecmd->argv[0], ecmd->argv);
 		ft_putstr_fd("exec failed ", 2);
 		ft_putstr_fd(ecmd->argv[0], 2);
@@ -41,10 +44,13 @@ static void	setup_redirection(char *file, int mode)
 {
 	int	fd;
 
+	file = remove_quotes_str(file);
 	fd = open(file, mode, 0644);
 	if (fd < 0)
 	{
-		perror(PROMPT_ERROR);
+		ft_putstr_fd(PROMPT_ERROR, 2);
+		ft_putstr_fd(file, 2);
+		ft_putstr_fd(": No such file or directory\n", 2);
 		exit(1);
 	}
 	if (mode == O_RDONLY)
@@ -52,6 +58,7 @@ static void	setup_redirection(char *file, int mode)
 	else
 		dup2(fd, STDOUT_FILENO);
 	close(fd);
+	free(file);
 }
 
 static void	setup_heredoc(char *hdoc)
@@ -69,10 +76,12 @@ static void	setup_heredoc(char *hdoc)
 
 void	handle_cmd_redir(t_redircmd *rcmd, t_minishell *minishell)
 {
+	// printf("rcmd->file: %s\n", rcmd->file);
 	if (rcmd->hdoc)
 		setup_heredoc(rcmd->hdoc);
 	else
 		setup_redirection(rcmd->file, rcmd->mode);
+	// exit(0);
 	runcmd(rcmd->cmd, minishell);
 }
 

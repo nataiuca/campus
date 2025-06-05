@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jgamarra <jgamarra@student.42madrid.com>   +#+  +:+       +#+        */
+/*   By: natferna <natferna@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/08 22:34:17 by jgamarra          #+#    #+#             */
-/*   Updated: 2025/05/26 21:46:55 by jgamarra         ###   ########.fr       */
+/*   Updated: 2025/06/04 23:54:07 by natferna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,34 +27,36 @@ int main(int argc, char **argv, char **envp)
     disable_echoctl();
     catch_signal();
     init_history(&ms);
-    input = get_input(&ms);
-    while (input)
+
+    while (1)
     {
+        input = get_input(&ms);
+
+        // Detecta Ctrl+D (input == NULL)
+        if (!input)
+        {
+            printf("exit\n");
+            safe_free_minishell(&ms);
+            exit(0);
+        }
+        else
+        {
+            size_t len = ft_strlen(input);
+            if (len > 0 && input[len - 1] == '\r')
+                input[len - 1] = '\0';
+        }
+
         ms.error_syntax = false;
-        catch_interactive(&ms, input, "minishell$");
         input = check_input_valid(input);
+
         if (*input)
         {
             save_history_file(&ms, input);
             control_cmd(parsecmd(input, &ms), &ms);
         }
+
         free(input);
-        input = get_input(&ms);
     }
-    {
-        int fd;
-        char *path = construct_history_path(HISTFILE_NAME);
-        if (path)
-        {
-            fd = open(path, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-            if (fd >= 0)
-            {
-                write_history_lines(fd, ms.history, 0);
-                close(fd);
-            }
-            free(path);
-        }
-    }
-    safe_free_minishell(&ms);
-    return (0);
+
+    return 0; // Nunca llega aquí
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   interactive.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jgamarra <jgamarra@student.42madrid.com>   +#+  +:+       +#+        */
+/*   By: natferna <natferna@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/15 12:28:48 by jgamarra          #+#    #+#             */
-/*   Updated: 2025/05/25 20:44:11 by jgamarra         ###   ########.fr       */
+/*   Updated: 2025/06/04 23:52:25 by natferna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,14 +57,13 @@ void	catch_signal(void)
 */
 void	catch_interactive(t_minishell *minishell, char *input, char *prompt)
 {
-	if (!input)
-	{
-		free (input);
-		printf("\033[1A");
-		printf("\033[%zuC", ft_strlen(prompt));
-		printf(" exit\n");
-		exit(0);
-	}
+    if (!input)
+    {
+        (void)prompt;
+        printf("exit\n");
+        safe_free_minishell(minishell);
+        exit(0);
+    }
 }
 
 /*

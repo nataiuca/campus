@@ -31,23 +31,22 @@ char check_argument(t_execcmd *ecmd, int idx)
 
 int is_valid_quote(t_cmd *cmd, t_minishell *minishell)
 {
-	char quote;
+	int quote;
 	int idx;
 	t_execcmd *ecmd;
 	
 	ecmd = (t_execcmd *)cmd;
 	idx = 1;
-	quote = 0;
 	while (ecmd->argv[idx])
 	{
 		quote = check_argument(ecmd, idx);
+		if (quote)
+		{	
+			ft_putstr_fd("Error: Unmatched quote\n", STDERR_FILENO);
+			minishell->status = 1;
+			return (0);
+		}
 		idx++;
-	}
-	if (quote)
-	{
-		ft_putstr_fd("Error: Unmatched quote\n", STDERR_FILENO);
-		minishell->status = 1;
-		return (0);
 	}
 	return (1);
 }

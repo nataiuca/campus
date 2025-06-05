@@ -11,12 +11,12 @@ cmd_controller.c line.c redirection.c token.c \
 cmd_impl.c vector.c cmd_util.c ./history/clear.c \
 ./history/create.c ./history/history.c \
 ./history/parse.c ./history/history_utils.c builtin_impl.c \
-./builtins/bi_controller.c \
+./builtins/bi_controller.c ./input/init.c\
 ./builtins/cd.c ./builtins/echo.c ./builtins/env.c ./builtins/exit.c \
 ./builtins/export.c ./builtins/pwd.c ./builtins/unset.c \
 ./util/quote.c ./util/error.c ./util/util.c \
 parse.c constructor.c nulterminate.c heredoc.c argument.c \
-token_util.c variable.c cmd_handle.c ./input/init.c\
+token_util.c variable.c cmd_handle.c \
 env_init.c env_create.c env_update.c
 # READLINE := -lreadline -lncurses
 READLINE := -I/opt/homebrew/opt/readline/include -L/opt/homebrew/opt/readline/lib -lreadline

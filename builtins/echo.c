@@ -6,7 +6,7 @@
 /*   By: jgamarra <jgamarra@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/27 17:48:19 by jgamarra          #+#    #+#             */
-/*   Updated: 2025/05/28 22:29:10 by jgamarra         ###   ########.fr       */
+/*   Updated: 2025/05/30 18:11:52 by jgamarra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,3 +44,4 @@ void	echo_impl(t_cmd *cmd, t_minishell *minishell)
 		ft_putstr_fd("\n", STDOUT_FILENO);
 	minishell->status = 0;
 }
+

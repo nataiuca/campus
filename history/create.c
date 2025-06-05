@@ -44,4 +44,3 @@ void	write_history_lines(int fd, t_history *hist, int start)
 		i++;
 	}
 }
-
