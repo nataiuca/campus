@@ -16,7 +16,8 @@ char check_argument(t_execcmd *ecmd, int idx)
 {
 	int pos;
 	char quote;	
-	
+
+	quote = 0;
 	pos = 0;
 	while (ecmd->argv[idx][pos])
 	{
